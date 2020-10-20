@@ -1,12 +1,17 @@
 package weather;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import weather.data.WeatherTestData;
 import weather.data.WeatherURI;
+import weather.util.MapMatcher;
 
 import java.util.Map;
+
+import org.apache.http.HttpStatus;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
@@ -21,6 +26,12 @@ public abstract class WeatherTest {
             .log(LogDetail.PARAMS)
             .build();
 
+    protected final static ResponseSpecification respSpec = new ResponseSpecBuilder()
+            .expectStatusCode(HttpStatus.SC_OK)
+            .log(LogDetail.BODY)
+            .build();
+
+
     protected void assertEqualToExpected(Map<?, ?> tested, Map<?,?> expected){
         expected.entrySet()
                 .forEach(entry-> {
@@ -33,6 +44,7 @@ public abstract class WeatherTest {
     }
 
     protected void assertEqualToExpected(WeatherTestData tested, WeatherTestData expected){
+        assertThat(tested.getLocation(), new MapMatcher(expected.getLocation()));
         assertEqualToExpected(tested.getRequest(), expected.getRequest());
         assertEqualToExpected(tested.getLocation(), expected.getLocation());
         assertEqualToExpected(tested.getCurrent(), expected.getCurrent());

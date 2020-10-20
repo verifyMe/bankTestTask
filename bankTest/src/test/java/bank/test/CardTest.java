@@ -1,21 +1,14 @@
 package bank.test;
 
 import bank.Card;
-import org.junit.Before;
-import org.junit.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.*;
+import org.junit.jupiter.api.Test;
 
 
 public class CardTest {
-    private boolean isThrown = false;
-
-    @Before
-    public void setNotThrown(){
-        isThrown = false;
-    }
 
     @Test
     public void testCreateLocalCard(){
@@ -27,12 +20,8 @@ public class CardTest {
 
     @Test
     public void testNegativeBalanceCard(){
-        try{
-            new Card(-100,"My Card");
-        }catch (IllegalArgumentException e){
-            isThrown = true;
-        }
-        assertTrue(isThrown);
+       assertThrows(IllegalArgumentException.class, () -> new Card(-100,"My Card"));
+        
     }
 
     @Test
@@ -44,22 +33,13 @@ public class CardTest {
 
     @Test
     public void testWrongCurrencyCard(){
-        try{
-            new Card("blahblah", 0,"My Card");
-        }catch (IllegalArgumentException e){
-            isThrown = true;
-        }
-        assertTrue(isThrown);
+          assertThrows(IllegalArgumentException.class,  () -> new Card("blahblah", 0,"My Card"));
     }
 
     @Test
     public void testNullParametersCard(){
-        try{
-            new Card(null, 0,null);
-        }catch (NullPointerException e){
-            isThrown = true;
-        }
-        assertTrue(isThrown);
+         assertThrows(NullPointerException.class,  () ->new Card(null, 0,null));
+        
     }
 
     @Test
@@ -79,14 +59,8 @@ public class CardTest {
 
     @Test
     public void testRefillNegative(){
-        Card card = new Card(100,"My card");
-        try {
-            card.refill(-100f);
-        }
-        catch (IllegalArgumentException e){
-            isThrown = true;
-        }
-        assertTrue(isThrown);
+        Card card = new Card(100,"My card");        
+        assertThrows(IllegalArgumentException.class,  () -> card.refill(-100f));
         assertThat(card.getBalance(), equalTo(100f));
     }
 
@@ -100,12 +74,7 @@ public class CardTest {
     @Test
     public void testWithdrawNegative(){
         Card card = new Card(100,"My card");
-        try{
-            card.withdraw(150);
-        }catch (UnsupportedOperationException e){
-            isThrown = true;
-        }
-        assertTrue(isThrown);
+        assertThrows(UnsupportedOperationException.class,  () -> card.withdraw(150));
         assertThat(card.getBalance(), equalTo(100f));
     }
 }

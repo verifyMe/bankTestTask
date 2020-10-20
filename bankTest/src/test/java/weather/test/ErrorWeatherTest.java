@@ -1,11 +1,13 @@
 package weather.test;
 
-import io.qameta.allure.junit4.DisplayName;
+
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 import weather.WeatherTest;
 import weather.data.WeatherURI;
 
@@ -15,7 +17,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 @DisplayName("Error codes")
 public class ErrorWeatherTest extends WeatherTest {
 
-    private final static ResponseSpecification respSpec = new ResponseSpecBuilder()
+    private final static ResponseSpecification errorRespSpec = new ResponseSpecBuilder()
             .expectStatusCode(HttpStatus.SC_OK)
             .expectBody("success",equalTo(false))
             .log(LogDetail.BODY)
@@ -32,7 +34,7 @@ public class ErrorWeatherTest extends WeatherTest {
             .when()
                 .get()
             .then()
-                .spec(respSpec)
+                .spec(errorRespSpec)
                 .and()
                 .body("error.code", equalTo(615))
                 .body("error.type", equalTo("request_failed"))
@@ -50,7 +52,7 @@ public class ErrorWeatherTest extends WeatherTest {
                 .when()
                 .get()
                 .then()
-                .spec(respSpec)
+                .spec(errorRespSpec)
                 .and()
                 .body("error.code", equalTo(101))
                 .body("error.type", equalTo("missing_access_key"))
@@ -68,7 +70,7 @@ public class ErrorWeatherTest extends WeatherTest {
                 .when()
                 .get()
                 .then()
-                .spec(respSpec)
+                .spec(errorRespSpec)
                 .and()
                 .body("error.code", equalTo(603))
                 .body("error.type", equalTo("historical_queries_not_supported_on_plan"))
@@ -85,7 +87,7 @@ public class ErrorWeatherTest extends WeatherTest {
                 .when()
                 .get()
                 .then()
-                .spec(respSpec)
+                .spec(errorRespSpec)
                 .and()
                 .body("error.code", equalTo(601))
                 .body("error.type", equalTo("missing_query"))

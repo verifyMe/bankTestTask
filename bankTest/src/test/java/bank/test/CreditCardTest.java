@@ -1,10 +1,12 @@
 package bank.test;
 
 import bank.CreditCard;
-import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 public class CreditCardTest {
 
@@ -41,13 +43,8 @@ public class CreditCardTest {
     public void creditCardWithdrawAboveTheLimit(){
         CreditCard card = new CreditCard("My card", 100f, 0.05f);
         card.refill(100f);
-        boolean isThrown = false;
-        try {
-            card.withdraw(350f);
-        }catch (UnsupportedOperationException e){
-            isThrown = true;
-        }
-        assertTrue(isThrown);
+        assertThrows(UnsupportedOperationException.class, () -> card.withdraw(350f));
+
     }
 
     @Test
