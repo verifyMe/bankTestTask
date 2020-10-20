@@ -1,6 +1,5 @@
 package bank;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NonNull;
 
